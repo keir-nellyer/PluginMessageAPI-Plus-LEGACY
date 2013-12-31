@@ -21,6 +21,7 @@ Example Usage
 
 A lot of these examples are written for Bukkit but they aren't too hard to translate to BungeeCord
 
+
 Initializing Example (Bukkit)
 
 ```java
@@ -33,6 +34,7 @@ public void onEnable(){
 }
 ```
 
+
 Initializing Example (BungeeCord)
 
 ```java
@@ -44,6 +46,7 @@ public void onEnable(){
     packetManager.registerListener(new IncomingPacketHandler());
 }
 ```
+
 
 Packet Class Example
 
@@ -70,9 +73,13 @@ public class PacketPlayerUpdatePoints extends Packet {
 }
 ```
 
+
 Sending Example (Bukkit)
 
-    packetManager.sendPacket(new PacketPlayer(Bukkit.getOnlinePlayers()[0], new PacketPlayerUpdatePoints(50)));
+```java
+packetManager.sendPacket(new PacketPlayer(Bukkit.getOnlinePlayers()[0], new PacketPlayerUpdatePoints(50)));
+```
+
 
 Listener Example (Bukkit)
 
