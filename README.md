@@ -3,10 +3,10 @@ PluginMessageAPI+
 
 An extension of the Plugin Message API for Bukkit, BungeeCord and soon The Minecraft Client
 
-Plugins/Mods/Addons/Servers using this API
-----------------------------------
+Links
+-----
 
-None reported yet :(
+* [Bukkit Post](http://forums.bukkit.org/threads/api-pluginmessageapi.213649/)
 
 Upcoming Features
 -----------------
@@ -94,3 +94,8 @@ public class IncomingPacketHandler implements PacketListener {
     }
 }
 ```
+
+Plugins/Mods/Addons/Servers using this API
+----------------------------------
+
+None reported yet :(
