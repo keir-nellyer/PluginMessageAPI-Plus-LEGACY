@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
  */
 public class PacketPlayer {
 
+    @Getter private String name;
     @Getter private ProxiedPlayer bungeePlayer = null;
     @Getter private Player bukkitPlayer = null;
 
@@ -19,6 +20,7 @@ public class PacketPlayer {
      */
     public PacketPlayer(ProxiedPlayer bungeePlayer){
         this.bungeePlayer = bungeePlayer;
+        this.name = bungeePlayer.getName();
     }
 
     /**
@@ -27,6 +29,7 @@ public class PacketPlayer {
      */
     public PacketPlayer(Player bukkitPlayer){
         this.bukkitPlayer = bukkitPlayer;
+        this.name = bukkitPlayer.getName();
     }
 
 }

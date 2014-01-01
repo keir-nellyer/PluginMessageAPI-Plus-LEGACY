@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -14,8 +15,8 @@ public abstract class PacketManager {
 
     private final String channel, forwardChannel;
 
-    private List<Class<?>> registeredPackets = new ArrayList<>();
-    private HashMap<Class<?>, List<PacketListener>> packetListeners = new HashMap<>();
+    private List<Class<? extends StandardPacket>> registeredPackets = new ArrayList<>();
+    private HashMap<Class<? extends StandardPacket>, List<PacketListener>> packetListeners = new HashMap<>();
 
     public PacketManager(String channel){
         this.channel = channel;
@@ -40,11 +41,11 @@ public abstract class PacketManager {
 
     /**
      * Registers a packet, this allows the packet to be sent or received
-     * A {@link com.iKeirNez.PluginMessageApiPlus.Packet} must have an empty constructor (no parameters)
+     * A {@link RawPacket} must have an empty constructor (no parameters)
      * in order to function
      * @param packet The packet to be registered
      */
-    public void registerPacket(Class<?> packet){
+    public void registerPacket(Class<? extends StandardPacket> packet){
         try {
             packet.getDeclaredConstructor();
         } catch (NoSuchMethodException e) {
@@ -58,7 +59,7 @@ public abstract class PacketManager {
      * Un-registers a packet, this means the packet can no longer be sent or receieved
      * @param packet The packet to be un-registered
      */
-    public void unregisterPacket(Class<?> packet){
+    public void unregisterPacket(Class<? extends StandardPacket> packet){
         registeredPackets.remove(packet);
     }
 
@@ -67,7 +68,7 @@ public abstract class PacketManager {
      * @param packet The packet to check if registered
      * @return That registered status of the packet
      */
-    public boolean isPacketRegistered(Packet packet){
+    public boolean isPacketRegistered(StandardPacket packet){
         return isPacketRegistered(packet.getClass());
     }
 
@@ -76,7 +77,7 @@ public abstract class PacketManager {
      * @param packet The packet to check if registered
      * @return That registered status of the packet
      */
-    public boolean isPacketRegistered(Class<?> packet){
+    public boolean isPacketRegistered(Class<? extends StandardPacket> packet){
         return registeredPackets.contains(packet);
     }
 
@@ -88,8 +89,8 @@ public abstract class PacketManager {
         for (Method method : packetListener.getClass().getMethods()){
             Class<?>[] parameters = method.getParameterTypes();
 
-            if (parameters.length == 1){
-                Class<?> parameter = parameters[0];
+            if (parameters.length == 1 && parameters[0].isAssignableFrom(StandardPacket.class)){
+                Class<? extends StandardPacket> parameter = (Class<? extends StandardPacket>) parameters[0];
 
                 if (registeredPackets.contains(parameter)){
                     if (!packetListeners.containsKey(parameter)){
@@ -109,7 +110,16 @@ public abstract class PacketManager {
      * @param packetListener The listener to be un-registered
      */
     public void unregisterListener(PacketListener packetListener){
-        packetListeners.remove(packetListener.getClass());
+        Iterator<Class<? extends StandardPacket>> iterator = packetListeners.keySet().iterator();
+        while (iterator.hasNext()){
+            Class<? extends StandardPacket> clazz = iterator.next();
+            List<PacketListener> list = packetListeners.get(clazz);
+
+            if (list.contains(packetListener)){
+                list.remove(packetListener);
+                packetListeners.put(clazz, list);
+            }
+        }
     }
 
     /**
@@ -147,16 +157,16 @@ public abstract class PacketManager {
     }
 
     private void doPacket(PacketPlayer packetPlayer, DataInputStream dataInputStream){
-        Class clazz = null;
+        Class<? extends StandardPacket> clazz = null;
 
         try {
-            clazz = Class.forName(dataInputStream.readUTF());
-            if (Packet.class.isAssignableFrom(clazz)){
+            clazz = (Class<? extends StandardPacket>) Class.forName(dataInputStream.readUTF());
+            if (StandardPacket.class.isAssignableFrom(clazz)){
                 if (!isPacketRegistered(clazz)){
                     throw new RuntimeException("Cannot receive unregistered packet " + clazz.getName());
                 }
 
-                Packet packet = (Packet) clazz.newInstance();
+                StandardPacket packet = (StandardPacket) clazz.newInstance();
                 packet.sender = packetPlayer;
                 packet.handle(dataInputStream);
 
@@ -187,18 +197,32 @@ public abstract class PacketManager {
         }
     }
 
+    private String figureChannel(StandardPacket packet, boolean forward){
+        String sendChannel = null;
+
+        if (packet instanceof RawPacket){
+            sendChannel = ((RawPacket) packet).getChannel();
+        }
+
+        if (sendChannel == null){
+            sendChannel = forward ? getForwardChannel() : getChannel();
+        }
+
+        return sendChannel;
+    }
+
     /**
      * Sends a packet via a player
      * @param packetPlayer The player whom this should be sent to
      * @param packet The packet to be sent to the player
      */
-    public void sendPacket(PacketPlayer packetPlayer, Packet packet){
+    public void sendPacket(PacketPlayer packetPlayer, StandardPacket packet){
         if (!isPacketRegistered(packet)){
             throw new RuntimeException("Tried to send unregistered packet " + packet.getClass().getName());
         }
 
         try {
-            sendPluginMessage(packetPlayer, getChannel(), packet.write().toByteArray());
+            sendPluginMessage(packetPlayer, figureChannel(packet, false), packet.write().toByteArray());
         } catch (IOException e) {
             System.out.println("Error whilst writing packet " + getClass().getSimpleName());
             e.printStackTrace();
@@ -215,7 +239,7 @@ public abstract class PacketManager {
      * @param packet The packet to be sent to the specified server
      * @param server The server the packet should be sent to
      */
-    public void sendForwardPacket(PacketPlayer packetPlayer, Packet packet, String server){
+    public void sendForwardPacket(PacketPlayer packetPlayer, StandardPacket packet, String server){
         if (!isPacketRegistered(packet)){
             throw new RuntimeException("Tried to send unregistered packet " + packet.getClass().getName());
         }
@@ -225,7 +249,7 @@ public abstract class PacketManager {
             DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
             dataOutputStream.writeUTF("Forward");
             dataOutputStream.writeUTF(server);
-            dataOutputStream.writeUTF(getForwardChannel());
+            dataOutputStream.writeUTF(figureChannel(packet, true));
 
             byte[] msgBytes = packet.write().toByteArray();
 

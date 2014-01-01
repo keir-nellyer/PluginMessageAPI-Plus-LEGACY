@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public class PacketWriter {
 
-    private final Packet packet;
+    private final StandardPacket packet;
 
     private ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
     @Delegate private DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
@@ -20,7 +20,7 @@ public class PacketWriter {
      * Creates a new instance of this class
      * @param packet The packet that is writing to this instance
      */
-    public PacketWriter(Packet packet){
+    public PacketWriter(StandardPacket packet){
         this.packet = packet;
 
         try {

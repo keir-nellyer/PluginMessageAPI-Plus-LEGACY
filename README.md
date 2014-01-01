@@ -11,8 +11,8 @@ Links
 Upcoming Features
 -----------------
 
-* The ability to send packets as a "raw" plugin message
-* Built-in BungeeCord packets
+* The ability to get the return value of "raw packets"
+* Forward packet for BungeeCord
 * A priority system (similar to Bukkit's)
 * Minecraft Client support (Forge etc)?
 

@@ -8,9 +8,10 @@ import java.io.IOException;
 /**
  * Created by iKeirNez on 11/12/13.
  */
-public abstract class Packet {
+public abstract class StandardPacket {
 
-    @Getter protected PacketPlayer sender;
+    @Getter
+    protected PacketPlayer sender;
 
     /**
      * When a packet is received, data is passed through here. The packet class must cache data ready for the instance to be passed t listeners
