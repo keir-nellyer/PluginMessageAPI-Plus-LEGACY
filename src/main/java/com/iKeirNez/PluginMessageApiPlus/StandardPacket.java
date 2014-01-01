@@ -1,7 +1,5 @@
 package com.iKeirNez.PluginMessageApiPlus;
 
-import lombok.Getter;
-
 import java.io.DataInputStream;
 import java.io.IOException;
 
@@ -10,8 +8,17 @@ import java.io.IOException;
  */
 public abstract class StandardPacket {
 
-    @Getter
     protected PacketPlayer sender;
+
+    /**
+     * Gets the player this packet was received from
+     * PLEASE NOTE for forwarded packets this may not be the player that you send the packet via, it will just be
+     * the first player found the could deliver that packet
+     * @return The player this packet was received from
+     */
+    public PacketPlayer getSender(){
+        return sender;
+    }
 
     /**
      * When a packet is received, data is passed through here. The packet class must cache data ready for the instance to be passed t listeners

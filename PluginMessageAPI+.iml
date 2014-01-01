@@ -21,7 +21,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Maven: org.bukkit:bukkit:1.7.2-R0.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.12.2" level="project" />
   </component>
 </module>
 

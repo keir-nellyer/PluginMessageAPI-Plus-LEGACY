@@ -1,6 +1,5 @@
 package com.iKeirNez.PluginMessageApiPlus;
 
-import lombok.Getter;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.entity.Player;
 
@@ -10,9 +9,9 @@ import org.bukkit.entity.Player;
  */
 public class PacketPlayer {
 
-    @Getter private String name;
-    @Getter private ProxiedPlayer bungeePlayer = null;
-    @Getter private Player bukkitPlayer = null;
+    private String name;
+    private ProxiedPlayer bungeePlayer = null;
+    private Player bukkitPlayer = null;
 
     /**
      * Constructor used in the case of a BungeeCord player
@@ -32,4 +31,15 @@ public class PacketPlayer {
         this.name = bukkitPlayer.getName();
     }
 
+    public String getName(){
+        return name;
+    }
+
+    public ProxiedPlayer getBungeePlayer(){
+        return bungeePlayer;
+    }
+
+    public Player getBukkitPlayer() {
+        return bukkitPlayer;
+    }
 }

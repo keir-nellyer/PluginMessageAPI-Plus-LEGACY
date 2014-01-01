@@ -39,10 +39,5 @@
             <artifactId>bukkit</artifactId>
             <version>1.7.2-R0.1-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.12.2</version>
-        </dependency>
     </dependencies>
 </project>
