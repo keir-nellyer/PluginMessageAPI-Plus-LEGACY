@@ -98,4 +98,4 @@ public class IncomingPacketHandler implements PacketListener {
 Plugins/Mods/Addons/Servers using this API
 ----------------------------------
 
-None reported yet :(
+* [CloudChat](http://www.spigotmc.org/resources/cloudchat.266/)
