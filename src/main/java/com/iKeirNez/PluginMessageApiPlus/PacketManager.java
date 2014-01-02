@@ -198,14 +198,16 @@ public abstract class PacketManager {
     }
 
     private String figureChannel(StandardPacket packet, boolean forward){
-        String sendChannel = null;
+        String sendChannel = getChannel();
 
-        if (packet instanceof RawPacket){
+        if (forward){
+            sendChannel = getForwardChannel();
+        } else if (packet instanceof RawPacket){
             sendChannel = ((RawPacket) packet).getChannel();
-        }
 
-        if (sendChannel == null){
-            sendChannel = forward ? getForwardChannel() : getChannel();
+            if (sendChannel == null){
+                sendChannel = getChannel();
+            }
         }
 
         return sendChannel;
