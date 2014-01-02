@@ -21,10 +21,12 @@ public class PacketWriter {
     public PacketWriter(StandardPacket packet){
         this.packet = packet;
 
-        try {
-            dataOutputStream.writeUTF(packet.getClass().getName());
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!(packet instanceof RawPacket)){
+            try {
+                dataOutputStream.writeUTF(packet.getClass().getName());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
