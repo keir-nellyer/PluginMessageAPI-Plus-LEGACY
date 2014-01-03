@@ -78,7 +78,7 @@ public abstract class PacketManager {
      * @return That registered status of the packet
      */
     public boolean isPacketRegistered(Class<? extends StandardPacket> packet){
-        return registeredPackets.contains(packet);
+        return registeredPackets.contains(packet) || packet.getName().startsWith("com.iKeirNez.PluginMessageApiPlus.packets.");
     }
 
     /**
