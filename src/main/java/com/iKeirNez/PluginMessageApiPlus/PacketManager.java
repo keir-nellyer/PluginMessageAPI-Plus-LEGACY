@@ -85,21 +85,25 @@ public abstract class PacketManager {
      * Registers a new listener, this class will be able to receive from packets it listens to
      * @param packetListener The listener to be registered
      */
-    public void registerListener(PacketListener packetListener){
+    public void registerListener(final PacketListener packetListener){
         for (Method method : packetListener.getClass().getMethods()){
             Class<?>[] parameters = method.getParameterTypes();
 
-            if (parameters.length == 1 && parameters[0].isAssignableFrom(StandardPacket.class)){
+            if (parameters.length == 1 && StandardPacket.class.isAssignableFrom(parameters[0])){
                 Class<? extends StandardPacket> parameter = (Class<? extends StandardPacket>) parameters[0];
 
                 if (registeredPackets.contains(parameter)){
                     if (!packetListeners.containsKey(parameter)){
-                        packetListeners.put(parameter, new ArrayList<PacketListener>());
+                        packetListeners.put(parameter, new ArrayList<PacketListener>(){
+                            {
+                                add(packetListener);
+                            }
+                        });
+                    } else {
+                        List<PacketListener> existingList = packetListeners.get(parameter);
+                        existingList.add(packetListener);
+                        packetListeners.put(parameter, existingList);
                     }
-
-                    List<PacketListener> existingList = packetListeners.get(parameter);
-                    existingList.add(packetListener);
-                    packetListeners.put(parameter, existingList);
                 }
             }
         }
@@ -157,27 +161,29 @@ public abstract class PacketManager {
     }
 
     private void doPacket(PacketPlayer packetPlayer, DataInputStream dataInputStream){
-        Class<? extends StandardPacket> clazz = null;
+        Class<? extends StandardPacket> packetClazz = null;
 
         try {
-            clazz = (Class<? extends StandardPacket>) Class.forName(dataInputStream.readUTF());
+            Class<?> clazz = Class.forName(dataInputStream.readUTF());
+
             if (StandardPacket.class.isAssignableFrom(clazz)){
-                if (!isPacketRegistered(clazz)){
-                    throw new RuntimeException("Cannot receive unregistered packet " + clazz.getName());
+                packetClazz = (Class<? extends StandardPacket>) clazz;
+                if (!isPacketRegistered(packetClazz)){
+                    throw new RuntimeException("Cannot receive unregistered packet " + packetClazz.getName());
                 }
 
-                StandardPacket packet = (StandardPacket) clazz.newInstance();
+                StandardPacket packet = packetClazz.newInstance();
                 packet.sender = packetPlayer;
                 packet.handle(dataInputStream);
 
-                List<PacketListener> listeners = packetListeners.get(clazz);
+                List<PacketListener> listeners = packetListeners.get(packetClazz);
                 if (listeners != null){
                     for (PacketListener packetListener : listeners){
                         for (Method method : packetListener.getClass().getMethods()){
                             if (method.isAnnotationPresent(PacketHandler.class)){
                                 Class<?>[] parameters = method.getParameterTypes();
 
-                                if (parameters.length == 1 && parameters[0].equals(clazz)){
+                                if (parameters.length == 1 && parameters[0].equals(packetClazz)){
                                     try {
                                         method.invoke(packetListener, packet);
                                     } catch (InvocationTargetException e) {
@@ -190,9 +196,9 @@ public abstract class PacketManager {
                     }
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e){
-        } catch (IOException e){
-            System.out.println("Error whilst receiving packet " + clazz != null ? clazz.getSimpleName() : "");
+        } catch (ClassNotFoundException e){
+        } catch (Throwable e){
+            System.out.println("Error whilst receiving packet " + packetClazz != null ? packetClazz.getSimpleName() : "");
             e.printStackTrace();
         }
     }
