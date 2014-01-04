@@ -240,7 +240,7 @@ public abstract class PacketManager {
     protected abstract void sendPluginMessage(PacketPlayer packetPlayer, String channel, byte[] bytes);
 
     /**
-     * Bukkit - Sends a packet in a forward method to the specified server
+     * Sends a packet in a forward method to the specified server
      * PLEASE NOTE: There will be issues when using this with a packet that is not intended to be forwarded
      * IE the sender/receiver of the packet is not the REAL sender/receiver, it is just the first player BungeeCord could send the packet via
      * @param packetPlayer The player whom this packet should be sent via
@@ -269,6 +269,17 @@ public abstract class PacketManager {
             System.out.println("Error whilst writing forward packet " + getClass().getSimpleName());
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Sends a packet in a forward method to all servers linked to the BungeeCord server
+     * PLEASE NOTE: There will be issues when using this with a packet that is not intended to be forwarded
+     * IE the sender/receiver of the packet is not the REAL sender/receiver, it is just the first player BungeeCord could send the packet via
+     * @param packetPlayer The player whom this packet should be sent via
+     * @param packet The packet to be sent to the specified server
+     */
+    public void sendForwardAllPacket(PacketPlayer packetPlayer, StandardPacket packet){
+        sendForwardPacket(packetPlayer, packet, "ALL");
     }
 
 }
