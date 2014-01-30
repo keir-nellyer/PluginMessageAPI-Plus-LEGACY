@@ -14,7 +14,7 @@
     </repositories>
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
-        <finalName>CastleDefence-Slave-${project.version}</finalName>
+        <finalName>PluginMessageAPI-${project.version}</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
