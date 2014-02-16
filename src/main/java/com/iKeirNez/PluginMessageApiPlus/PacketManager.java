@@ -1,5 +1,7 @@
 package com.iKeirNez.PluginMessageApiPlus;
 
+import com.iKeirNez.PluginMessageApiPlus.implementations.BungeeCordPacketManager;
+
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -17,6 +19,7 @@ public abstract class PacketManager {
 
     private List<Class<? extends StandardPacket>> registeredPackets = new ArrayList<>();
     private HashMap<Class<? extends StandardPacket>, List<PacketListener>> packetListeners = new HashMap<>();
+    private HashMap<String, List<StandardPacket>> sendQueue = new HashMap<>();
 
     public PacketManager(String channel){
         this.channel = channel;
@@ -219,52 +222,108 @@ public abstract class PacketManager {
         return sendChannel;
     }
 
+    protected void playerJoined(PacketPlayer packetPlayer){
+        for (String server : sendQueue.keySet()){
+            List<StandardPacket> packets = sendQueue.get(server);
+
+            for (StandardPacket packet : packets){
+                if (server == null){
+                    sendPacket(packetPlayer, packet);
+                } else {
+                    sendPacket(packetPlayer, packet, server);
+                }
+            }
+        }
+
+        sendQueue.clear();
+    }
+
+    private void addToQueue(String server, StandardPacket packet){
+        List<StandardPacket> list = sendQueue.get(server);
+
+        if (list == null){
+            list = new ArrayList<>();
+        }
+
+        list.add(packet);
+        sendQueue.put(server, list);
+    }
+
+    /**
+     * Sends a packet via any available means
+     * @param packet The packet to send
+     */
+    public void sendPacket(StandardPacket packet){
+        sendPacket(null, packet, true);
+    }
+
     /**
      * Sends a packet via a player
      * @param packetPlayer The player whom this should be sent to
      * @param packet The packet to be sent to the player
      */
     public void sendPacket(PacketPlayer packetPlayer, StandardPacket packet){
+        sendPacket(packetPlayer, packet, false);
+    }
+
+    /**
+     * Sends a packet via a player
+     * @param packetPlayer The player whom this should be sent to
+     * @param packet The packet to be sent to the player
+     * @param random Send via a random player if packetPlayer is null
+     */
+    public void sendPacket(PacketPlayer packetPlayer, StandardPacket packet, boolean random){
         if (!isPacketRegistered(packet)){
             throw new RuntimeException("Tried to send unregistered packet " + packet.getClass().getName());
         }
 
         try {
-            sendPluginMessage(packetPlayer, figureChannel(packet, false), packet.write().toByteArray());
+            if (packetPlayer == null){
+                if (getPlayerCount() > 0){
+                    sendPluginMessage(getRandomPlayer(), figureChannel(packet, false), packet.write().toByteArray());
+                } else if (random) {
+                    addToQueue(null, packet);
+                }
+            } else {
+                sendPluginMessage(packetPlayer, figureChannel(packet, false), packet.write().toByteArray());
+            }
         } catch (IOException e) {
             System.out.println("Error whilst writing packet " + getClass().getSimpleName());
             e.printStackTrace();
         }
     }
 
-    protected abstract void sendPluginMessage(PacketPlayer packetPlayer, String channel, byte[] bytes);
-
     /**
-     * Sends a packet in a forward method to the specified server
+     * Sends a packet in a forward method to the specified server if Bukkit implementation or if BungeeCord implementation directly send it to the server
      * PLEASE NOTE: There will be issues when using this with a packet that is not intended to be forwarded
      * IE the sender/receiver of the packet is not the REAL sender/receiver, it is just the first player BungeeCord could send the packet via
      * @param packetPlayer The player whom this packet should be sent via
      * @param packet The packet to be sent to the specified server
      * @param server The server the packet should be sent to
      */
-    public void sendForwardPacket(PacketPlayer packetPlayer, StandardPacket packet, String server){
+    public void sendPacket(PacketPlayer packetPlayer, StandardPacket packet, String server){
         if (!isPacketRegistered(packet)){
             throw new RuntimeException("Tried to send unregistered packet " + packet.getClass().getName());
         }
 
         try {
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
-            dataOutputStream.writeUTF("Forward");
-            dataOutputStream.writeUTF(server);
-            dataOutputStream.writeUTF(figureChannel(packet, true));
+            if (this instanceof BungeeCordPacketManager){ // send directly to server if BungeeCord implementation
+                ((BungeeCordPacketManager) this).sendPluginMessage(server, figureChannel(packet, false), packet.write().toByteArray());
+            } else {
 
-            byte[] msgBytes = packet.write().toByteArray();
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
+                dataOutputStream.writeUTF("Forward");
+                dataOutputStream.writeUTF(server);
+                dataOutputStream.writeUTF(figureChannel(packet, true));
 
-            dataOutputStream.writeShort(msgBytes.length);
-            dataOutputStream.write(msgBytes);
+                byte[] msgBytes = packet.write().toByteArray();
 
-            sendPluginMessage(packetPlayer, "BungeeCord", byteArrayOutputStream.toByteArray());
+                dataOutputStream.writeShort(msgBytes.length);
+                dataOutputStream.write(msgBytes);
+
+                sendPluginMessage(packetPlayer, "BungeeCord", byteArrayOutputStream.toByteArray());
+            }
         } catch (IOException e){
             System.out.println("Error whilst writing forward packet " + getClass().getSimpleName());
             e.printStackTrace();
@@ -279,7 +338,11 @@ public abstract class PacketManager {
      * @param packet The packet to be sent to the specified server
      */
     public void sendForwardAllPacket(PacketPlayer packetPlayer, StandardPacket packet){
-        sendForwardPacket(packetPlayer, packet, "ALL");
+        sendPacket(packetPlayer, packet, "ALL");
     }
+
+    protected abstract void sendPluginMessage(PacketPlayer packetPlayer, String channel, byte[] bytes);
+    protected abstract int getPlayerCount();
+    protected abstract PacketPlayer getRandomPlayer();
 
 }
