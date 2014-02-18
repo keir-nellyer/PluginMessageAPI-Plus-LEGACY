@@ -1,6 +1,6 @@
 package com.iKeirNez.PluginMessageApiPlus;
 
-import com.iKeirNez.PluginMessageApiPlus.implementations.BungeeCordPacketManager;
+import com.iKeirNez.PluginMessageApiPlus.implementations.IProxy;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -307,10 +307,9 @@ public abstract class PacketManager {
         }
 
         try {
-            if (this instanceof BungeeCordPacketManager){ // send directly to server if BungeeCord implementation
-                ((BungeeCordPacketManager) this).sendPluginMessage(server, figureChannel(packet, false), packet.write().toByteArray());
+            if (this instanceof IProxy){ // send directly to server if Proxy implementation
+                ((IProxy) this).sendPluginMessage(server, figureChannel(packet, false), packet.write().toByteArray());
             } else {
-
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
                 dataOutputStream.writeUTF("Forward");

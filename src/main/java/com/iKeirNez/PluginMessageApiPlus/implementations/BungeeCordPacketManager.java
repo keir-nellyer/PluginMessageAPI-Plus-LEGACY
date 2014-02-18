@@ -14,7 +14,7 @@ import net.md_5.bungee.event.EventHandler;
 /**
  * Created by iKeirNez on 24/12/13.
  */
-public class BungeeCordPacketManager extends PacketManager implements Listener {
+public class BungeeCordPacketManager extends PacketManager implements Listener, IProxy {
 
     public BungeeCordPacketManager(Plugin bungeePlugin, String channel){
         super(channel);
@@ -27,6 +27,7 @@ public class BungeeCordPacketManager extends PacketManager implements Listener {
         packetPlayer.getBungeePlayer().getServer().sendData(channel, bytes);
     }
 
+    @Override
     public void sendPluginMessage(String server, String channel, byte[] bytes){
         ProxyServer.getInstance().getServerInfo(server).sendData(channel, bytes);
     }
