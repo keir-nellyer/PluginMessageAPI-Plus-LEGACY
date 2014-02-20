@@ -1,7 +1,7 @@
 PluginMessageAPI+
 =================
 
-An extension of the Plugin Message API for Bukkit, BungeeCord and soon The Minecraft Client
+An extension of the Plugin Message API for Bukkit, BungeeCord
 
 Links
 -----
@@ -11,10 +11,7 @@ Links
 Upcoming Features
 -----------------
 
-* The ability to get the return value of "raw packets"
 * Forward packet for BungeeCord
-* A priority system (similar to Bukkit's)
-* Minecraft Client support (Forge etc)?
 
 Example Usage
 -------------
