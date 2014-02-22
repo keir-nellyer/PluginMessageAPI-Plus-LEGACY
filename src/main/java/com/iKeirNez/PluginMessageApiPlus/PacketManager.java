@@ -265,7 +265,7 @@ public abstract class PacketManager {
                 PacketForward packetForward = (PacketForward) packet;
 
                 if (packetForward.channel == null){
-                    packetForward.channel = getChannel();
+                    packetForward.channel = getForwardChannel();
                 }
             }
 
