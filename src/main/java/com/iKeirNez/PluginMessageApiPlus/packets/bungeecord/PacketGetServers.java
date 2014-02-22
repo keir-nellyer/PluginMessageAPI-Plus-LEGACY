@@ -15,7 +15,7 @@ public class PacketGetServers extends RawPacket {
     }
 
     @Override
-    protected PacketWriter write() throws IOException {
+    public PacketWriter write() throws IOException {
         PacketWriter packetWriter = new PacketWriter(this);
         packetWriter.writeUTF("GetServers");
         return packetWriter;

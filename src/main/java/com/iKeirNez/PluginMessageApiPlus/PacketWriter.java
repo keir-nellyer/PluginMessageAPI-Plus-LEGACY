@@ -44,6 +44,10 @@ public class PacketWriter {
         dataOutputStream.write(b, off, len);
     }
 
+    public void write(byte[] b) throws IOException {
+        dataOutputStream.write(b);
+    }
+
     public void flush() throws IOException {
         dataOutputStream.flush();
     }

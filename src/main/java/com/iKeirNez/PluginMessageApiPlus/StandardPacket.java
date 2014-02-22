@@ -25,13 +25,13 @@ public abstract class StandardPacket {
      * @param dataInputStream The data received
      * @throws java.io.IOException Thrown if there is an error handling the packet
      */
-    protected abstract void handle(DataInputStream dataInputStream) throws IOException;
+    public abstract void handle(DataInputStream dataInputStream) throws IOException;
 
     /**
      * This function is called when a packet is being prepared to be sent, the function must write cached values to a PacketWriter and return it
      * @return The PacketWriter containing all data ready to send
      * @throws java.io.IOException Thrown if there is an error writing this packet
      */
-    protected abstract PacketWriter write() throws IOException;
+    public abstract PacketWriter write() throws IOException;
 
 }

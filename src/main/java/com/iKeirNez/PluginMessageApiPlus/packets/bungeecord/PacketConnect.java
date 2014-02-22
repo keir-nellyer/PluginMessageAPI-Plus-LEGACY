@@ -18,7 +18,7 @@ public class PacketConnect extends RawPacket {
     }
 
     @Override
-    protected PacketWriter write() throws IOException {
+    public PacketWriter write() throws IOException {
         PacketWriter packetWriter = new PacketWriter(this);
         packetWriter.writeUTF("Connect");
         packetWriter.writeUTF(server);
