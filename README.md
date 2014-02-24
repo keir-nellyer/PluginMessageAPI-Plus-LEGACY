@@ -7,6 +7,7 @@ Links
 -----
 
 * [Bukkit Post](http://forums.bukkit.org/threads/api-pluginmessageapi.213649/)
+* [Spigot Post](http://www.spigotmc.org/resources/pluginmessageapi.294/)
 
 Upcoming Features
 -----------------
@@ -48,7 +49,7 @@ public void onEnable(){
 Packet Class Example
 
 ```java
-public class PacketPlayerUpdatePoints extends Packet {
+public class PacketPlayerUpdatePoints extends StandardPacket {
 
     public int points;
 
@@ -58,11 +59,11 @@ public class PacketPlayerUpdatePoints extends Packet {
         this.change = change;
     }
 
-    protected void handle(DataInputStream dataInputStream) throws IOException {
+    public void handle(DataInputStream dataInputStream) throws IOException {
         this.point = dataInputStream.readInt();
     }
 
-    protected PacketWriter write() throws IOException {
+    public PacketWriter write() throws IOException {
         PacketWriter packetWriter = new PacketWriter(this);
         packetWriter.writeInt(points);
         return packetWriter;
