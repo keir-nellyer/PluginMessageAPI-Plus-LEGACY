@@ -2,9 +2,9 @@ package com.iKeirNez.PluginMessageApiPlus.implementations;
 
 import com.iKeirNez.PluginMessageApiPlus.PacketManager;
 import com.iKeirNez.PluginMessageApiPlus.PacketPlayer;
-import net.md_5.bungee.ServerConnection;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -41,7 +41,7 @@ public class BungeeCordPacketManager extends PacketManager implements Listener {
     public void onPluginMessage(PluginMessageEvent e){
         String channel = e.getTag();
 
-        if (e.getSender() instanceof ServerConnection && channel.equals(getChannel())){ // prevents players faking a plugin message
+        if (e.getSender() instanceof Server && channel.equals(getChannel())){ // prevents players faking a plugin message
             ProxiedPlayer proxiedPlayer = (ProxiedPlayer) e.getReceiver();
             dispatchIncomingPacket(new PacketPlayer(proxiedPlayer), e.getData());
         }
