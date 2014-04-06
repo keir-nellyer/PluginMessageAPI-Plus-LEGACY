@@ -9,16 +9,8 @@ Links
 * [Bukkit Post](http://forums.bukkit.org/threads/api-pluginmessageapi.213649/)
 * [Spigot Post](http://www.spigotmc.org/resources/pluginmessageapi.294/)
 
-Upcoming Features
------------------
-
-* Forward packet for BungeeCord
-
 Example Usage
 -------------
-
-A lot of these examples are written for Bukkit but they aren't too hard to translate to BungeeCord
-
 
 Initializing Example (Bukkit)
 
@@ -27,7 +19,6 @@ public PacketManager packetManager;
 
 public void onEnable(){
     packetManager = new BukkitPacketManager(this, "MyChannelName");
-    packetManager.registerPacket(PacketPlayerUpdatePoints.class);
     packetManager.registerListener(new IncomingPacketHandler());
 }
 ```
@@ -40,7 +31,6 @@ public PacketManager packetManager;
 
 public void onEnable(){
     packetManager = new BungeeCordPacketManager(this, "MyChannelName");
-    packetManager.registerPacket(PacketPlayerUpdatePoints.class);
     packetManager.registerListener(new IncomingPacketHandler());
 }
 ```
@@ -72,14 +62,14 @@ public class PacketPlayerUpdatePoints extends StandardPacket {
 ```
 
 
-Sending Example (Bukkit)
+Sending Example (Bukkit, similar for BungeeCord)
 
 ```java
 packetManager.sendPacket(new PacketPlayer(Bukkit.getOnlinePlayers()[0], new PacketPlayerUpdatePoints(50)));
 ```
 
 
-Listener Example (Bukkit)
+Listener Example (Bukkit, same for BungeeCord)
 
 ```java
 public class IncomingPacketHandler implements PacketListener {
