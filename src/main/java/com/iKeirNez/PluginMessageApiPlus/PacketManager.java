@@ -90,17 +90,17 @@ public abstract class PacketManager {
             if (parameters.length == 1 && StandardPacket.class.isAssignableFrom(parameters[0])){
                 Class<? extends StandardPacket> parameter = (Class<? extends StandardPacket>) parameters[0];
 
-                    if (!packetListeners.containsKey(parameter)){
-                        packetListeners.put(parameter, new ArrayList<PacketListener>(){
-                            {
-                                add(packetListener);
-                            }
-                        });
-                    } else {
-                        List<PacketListener> existingList = packetListeners.get(parameter);
-                        existingList.add(packetListener);
-                        packetListeners.put(parameter, existingList);
-                    }
+                if (!packetListeners.containsKey(parameter)){
+                    packetListeners.put(parameter, new ArrayList<PacketListener>(){
+                        {
+                            add(packetListener);
+                        }
+                    });
+                } else {
+                    List<PacketListener> existingList = packetListeners.get(parameter);
+                    existingList.add(packetListener);
+                    packetListeners.put(parameter, existingList);
+                }
             }
         }
     }
