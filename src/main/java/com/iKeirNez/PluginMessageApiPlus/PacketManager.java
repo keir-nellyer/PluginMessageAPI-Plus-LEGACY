@@ -256,10 +256,12 @@ public abstract class PacketManager {
             }
 
             if (packetPlayer == null){
-                if (getPlayerCount() > 0){
-                    sendPluginMessage(getRandomPlayer(), figureChannel(packet), packet.write().toByteArray());
-                } else if (random) {
-                    addToQueue(packet);
+                if (random){
+                    if (getPlayerCount() > 0){
+                        sendPluginMessage(getRandomPlayer(), figureChannel(packet), packet.write().toByteArray());
+                    } else {
+                        addToQueue(packet);
+                    }
                 }
             } else {
                 sendPluginMessage(packetPlayer, figureChannel(packet), packet.write().toByteArray());
