@@ -41,9 +41,13 @@ public class BungeeCordPacketManager extends PacketManager implements Listener {
     public void onPluginMessage(PluginMessageEvent e){
         String channel = e.getTag();
 
-        if (e.getSender() instanceof Server && channel.equals(getChannel())){ // prevents players faking a plugin message
-            ProxiedPlayer proxiedPlayer = (ProxiedPlayer) e.getReceiver();
-            dispatchIncomingPacket(new PacketPlayer(proxiedPlayer), e.getData());
+        if (channel.equals(getChannel())){
+            e.setCancelled(true);
+
+            if (e.getSender() instanceof Server){ // prevents players faking a plugin message
+                ProxiedPlayer proxiedPlayer = (ProxiedPlayer) e.getReceiver();
+                dispatchIncomingPacket(new PacketPlayer(proxiedPlayer), e.getData());
+            }
         }
     }
 

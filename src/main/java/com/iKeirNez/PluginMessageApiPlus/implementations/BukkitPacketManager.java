@@ -39,12 +39,12 @@ public class BukkitPacketManager extends PacketManager implements PluginMessageL
 
     @Override
     protected int getPlayerCount() {
-        return Bukkit.getOnlinePlayers().length;
+        return Bukkit.getOnlinePlayers().size();
     }
 
     @Override
     protected PacketPlayer getRandomPlayer() {
-        return getPlayerCount() > 0 ? new PacketPlayer(Bukkit.getOnlinePlayers()[0]) : null;
+        return getPlayerCount() > 0 ? new PacketPlayer(Bukkit.getOnlinePlayers().iterator().next()) : null;
     }
 
     public void onPluginMessageReceived(String channel, Player player, byte[] bytes) {
