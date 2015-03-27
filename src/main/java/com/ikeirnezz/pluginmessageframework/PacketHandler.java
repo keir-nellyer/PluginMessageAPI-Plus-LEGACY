@@ -1,4 +1,4 @@
-package com.ikeirnez.pluginmessageframework;
+package com.ikeirnezz.pluginmessageframework;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
