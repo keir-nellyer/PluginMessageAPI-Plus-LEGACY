@@ -1,4 +1,4 @@
-package com.ikeirnezz.pluginmessageframework;
+package com.ikeirnez.pluginmessageframework;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.entity.Player;

@@ -1,8 +1,8 @@
-package com.ikeirnezz.pluginmessageframework.packets.bungeecord;
+package com.ikeirnez.pluginmessageframework.packets.bungeecord;
 
-import com.ikeirnezz.pluginmessageframework.PacketWriter;
-import com.ikeirnezz.pluginmessageframework.StandardPacket;
-import com.ikeirnezz.pluginmessageframework.RawPacket;
+import com.ikeirnez.pluginmessageframework.PacketWriter;
+import com.ikeirnez.pluginmessageframework.StandardPacket;
+import com.ikeirnez.pluginmessageframework.RawPacket;
 
 import java.io.IOException;
 

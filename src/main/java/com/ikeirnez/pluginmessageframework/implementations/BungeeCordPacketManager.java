@@ -1,7 +1,7 @@
-package com.ikeirnezz.pluginmessageframework.implementations;
+package com.ikeirnez.pluginmessageframework.implementations;
 
-import com.ikeirnezz.pluginmessageframework.PacketPlayer;
-import com.ikeirnezz.pluginmessageframework.PacketManager;
+import com.ikeirnez.pluginmessageframework.PacketPlayer;
+import com.ikeirnez.pluginmessageframework.PacketManager;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.connection.Server;

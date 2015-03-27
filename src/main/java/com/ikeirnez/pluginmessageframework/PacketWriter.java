@@ -1,4 +1,4 @@
-package com.ikeirnezz.pluginmessageframework;
+package com.ikeirnez.pluginmessageframework;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;

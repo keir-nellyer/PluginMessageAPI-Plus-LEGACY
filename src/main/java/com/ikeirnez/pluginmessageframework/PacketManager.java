@@ -1,6 +1,6 @@
-package com.ikeirnezz.pluginmessageframework;
+package com.ikeirnez.pluginmessageframework;
 
-import com.ikeirnezz.pluginmessageframework.packets.bungeecord.PacketForward;
+import com.ikeirnez.pluginmessageframework.packets.bungeecord.PacketForward;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
