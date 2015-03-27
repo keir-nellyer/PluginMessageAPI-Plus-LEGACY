@@ -1,4 +1,4 @@
-PluginMessageAPI+
+PluginMessageFramework
 =================
 
 An extension of the Plugin Message API for Bukkit, BungeeCord

@@ -1,4 +1,4 @@
-package com.iKeirNez.PluginMessageApiPlus;
+package com.ikeirnez.pluginmessageframework;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

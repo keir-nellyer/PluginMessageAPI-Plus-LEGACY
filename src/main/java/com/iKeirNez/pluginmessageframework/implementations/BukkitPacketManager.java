@@ -1,7 +1,7 @@
-package com.iKeirNez.PluginMessageApiPlus.implementations;
+package com.ikeirnez.pluginmessageframework.implementations;
 
-import com.iKeirNez.PluginMessageApiPlus.PacketManager;
-import com.iKeirNez.PluginMessageApiPlus.PacketPlayer;
+import com.ikeirnez.pluginmessageframework.PacketPlayer;
+import com.ikeirnez.pluginmessageframework.PacketManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

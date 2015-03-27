@@ -1,6 +1,6 @@
-package com.iKeirNez.PluginMessageApiPlus;
+package com.ikeirnez.pluginmessageframework;
 
-import com.iKeirNez.PluginMessageApiPlus.packets.bungeecord.PacketForward;
+import com.ikeirnez.pluginmessageframework.packets.bungeecord.PacketForward;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -134,7 +134,7 @@ public abstract class PacketManager {
 
     /**
      * Dispatches an incoming forwarded packet to listeners
-     * PLEASE NOTE the {@link com.iKeirNez.PluginMessageApiPlus.PacketPlayer} is not the "REAL" sender
+     * PLEASE NOTE the {@link PacketPlayer} is not the "REAL" sender
      * as this packet has been forwarded from another server
      * @param packetPlayer The player whom this packet was received from
      * @param bytes The byte array containing data
@@ -157,10 +157,12 @@ public abstract class PacketManager {
     }
 
     private void doPacket(PacketPlayer packetPlayer, DataInputStream dataInputStream){
-        Class<? extends StandardPacket> packetClazz = null;
+        Class<? extends StandardPacket> packetClazz;
+        String packetName = "";
 
         try {
-            Class<?> clazz = Class.forName(dataInputStream.readUTF());
+            packetName = dataInputStream.readUTF();
+            Class<?> clazz = Class.forName(packetName);
 
             if (StandardPacket.class.isAssignableFrom(clazz)){
                 packetClazz = (Class<? extends StandardPacket>) clazz;
@@ -189,9 +191,9 @@ public abstract class PacketManager {
                     }
                 }
             }
-        } catch (ClassNotFoundException e){
+        } catch (ClassNotFoundException ignored){ // silently ignore packets we don't know about
         } catch (Throwable e){
-            System.out.println("Error whilst receiving packet " + packetClazz != null ? packetClazz.getSimpleName() : "");
+            System.out.println("Error whilst receiving packet " + packetName);
             e.printStackTrace();
         }
     }

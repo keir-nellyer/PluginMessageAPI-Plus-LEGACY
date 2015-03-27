@@ -1,18 +1,18 @@
-package com.iKeirNez.PluginMessageApiPlus.packets.bungeecord;
+package com.ikeirnez.pluginmessageframework.packets.bungeecord;
 
-import com.iKeirNez.PluginMessageApiPlus.PacketWriter;
-import com.iKeirNez.PluginMessageApiPlus.RawPacket;
+import com.ikeirnez.pluginmessageframework.PacketWriter;
+import com.ikeirnez.pluginmessageframework.RawPacket;
 
 import java.io.IOException;
 
 /**
  * Created by iKeirNez on 01/01/14.
  */
-public class PacketPlayerList extends RawPacket {
+public class PacketConnect extends RawPacket {
 
     public String server;
 
-    public PacketPlayerList(String server){
+    public PacketConnect(String server){
         super("BungeeCord");
         this.server = server;
     }
@@ -20,7 +20,7 @@ public class PacketPlayerList extends RawPacket {
     @Override
     public PacketWriter write() throws IOException {
         PacketWriter packetWriter = new PacketWriter(this);
-        packetWriter.writeUTF("PlayerList");
+        packetWriter.writeUTF("Connect");
         packetWriter.writeUTF(server);
         return packetWriter;
     }

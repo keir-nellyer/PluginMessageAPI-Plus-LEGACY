@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.iKeirNez</groupId>
-    <artifactId>PluginMessageApiPlus</artifactId>
-    <version>1.11</version>
+    <groupId>com.ikeirnez</groupId>
+    <artifactId>PluginMessageFramework</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
     <repositories>
         <repository>
-            <id>Bukkit Repo</id>
-            <url>http://repo.bukkit.org/content/repositories/public/</url>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
             <id>sonatype-oss-public</id>
@@ -18,7 +18,7 @@
     </repositories>
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
-        <finalName>PluginMessageAPI-${project.version}</finalName>
+        <finalName>PluginMessageFramework-${project.version}</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -34,12 +34,12 @@
         <dependency>
             <groupId>net.md-5</groupId>
             <artifactId>bungeecord-api</artifactId>
-            <version>1.7-SNAPSHOT</version>
+            <version>1.8-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.7.9-R0.3-SNAPSHOT</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.8.3-R0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

@@ -1,4 +1,4 @@
-package com.iKeirNez.PluginMessageApiPlus;
+package com.ikeirnez.pluginmessageframework;
 
 import java.io.DataInputStream;
 import java.io.IOException;
